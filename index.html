@@ -26,6 +26,7 @@
             <div>
                 <button onclick="login()">Login</button>
                 <button onclick="getDashboard()">Get Dashboard</button>
+                <button onclick="getSettings()">Get Settings</button>
             </div>
         </main>
     </div>
@@ -63,13 +64,25 @@
             });
         }
 
-        function onLoad() {
+        function getSettings() {
             const token = localStorage.getItem('jwt');
-            if(token) {
-                getDashboard();
-            }
+            axios.get('/api/settings', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(res => {
+                if (res && res.data && res.data.success) {
+                    document.querySelector('h1.row').innerHTML = 'Settings';
+                    document.querySelector('main').innerHTML = res.data.myContent;
+                }
+            }).catch(err => {
+                console.error('Error accessing settings:', err);
+                if (err.response && err.response.status === 401) {
+                    alert('You need to login to access settings.');
+                }
+            });
         }
-        onLoad();
+
     </script>
 </body>
 </html>
