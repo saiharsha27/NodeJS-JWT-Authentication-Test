@@ -82,7 +82,36 @@
                 }
             });
         }
+        function navigate(route) {
+            history.pushState(null, null, route);
+            updateContent(route);
+        }
 
+        function updateContent(route) {
+            // This function should update the page content based on the route
+            switch(route) {
+                case '/dashboard':
+                    getDashboard();
+                    break;
+                case '/settings':
+                    getSettings();
+                    break;
+            }
+        }
+
+        // Update click handlers for navigation
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const route = '/' + e.target.textContent.toLowerCase();
+                navigate(route);
+            });
+        });
+
+        // Handle popstate events (back/forward browser buttons)
+        window.addEventListener('popstate', (e) => {
+            updateContent(window.location.pathname);
+        });
     </script>
 </body>
 </html>
