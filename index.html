@@ -32,26 +32,7 @@
     </div>
 
     <script>
-        function login(){
-            const data = {
-                username: document.getElementById('username').value,
-                password: document.getElementById('password').value,
-            };
-            axios.post('/api/login', data)
-                .then(res => {
-                    console.log(res);
-                    document.getElementById('username').value = '';
-                    document.getElementById('password').value = '';
-                    if (res && res.data && res.data.success) {
-                        const token = res.data.token;
-                        localStorage.setItem('jwt', token);
-                        getDashboard();
-                    }
-                });
-        }
-
         let tokenCheckInterval;
-
         function isTokenExpired(token) {
             if (!token) return true;
             const base64Url = token.split('.')[1];
