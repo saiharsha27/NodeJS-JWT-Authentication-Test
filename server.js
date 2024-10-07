@@ -43,11 +43,18 @@ app.post('/api/login', (req, res) => {
 
     for (let user of users) {
         if (username == user.username && password == user.password) {
-            let token = jwt.sign({ id: user.id, username: user.username }, secretKey, { expiresIn: '7d' });
+            // Set expiration time to 3 minutes
+            const expiresIn = '3m';
+            let token = jwt.sign({ id: user.id, username: user.username }, secretKey, { expiresIn });
+            
+            // Calculate expiration time in milliseconds
+            const expirationTime = jwt.decode(token).exp * 1000;
+            
             res.json({
                 success: true,
                 err: null,
-                token
+                token,
+                expiresAt: expirationTime
             });
             userFound = true;
             break;
